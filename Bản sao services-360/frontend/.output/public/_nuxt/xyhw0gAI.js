@@ -1,0 +1,1 @@
+import{d as r,o as t,c as o,t as s,g as n}from"./JeXhLNeB.js";const a={key:0,class:"text-sm text-[var(--ui-error)] mt-1"},c=r({__name:"FormFieldError",props:{errors:{}},setup(e){return(m,_)=>e.errors?.length?(t(),o("p",a,s(e.errors[0]),1)):n("",!0)}}),d=Object.assign(c,{__name:"SharedCrudFormFieldError"});export{d as _};

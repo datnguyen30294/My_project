@@ -1,0 +1,42 @@
+*.log
+.DS_Store
+Thumbs.db
+Homestead.json
+Homestead.yaml
+
+# Backend (Laravel)
+backend/.env
+backend/.env.backup
+backend/.env.production
+backend/.phpactor.json
+backend/.phpunit.result.cache
+backend/.fleet
+backend/.idea
+backend/.nova
+backend/.phpunit.cache
+backend/.vscode
+backend/.zed
+backend/auth.json
+backend/node_modules
+backend/public/build
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/storage/pail
+backend/vendor
+backend/node_modules
+
+# Frontend (Next.js)
+frontend/node_modules
+frontend/.next
+frontend/.env.local
+frontend/out
+
+frontend/.pnpm-store
+
+# Infra
+infra/k8s/app/*/.env
+infra/k8s/cluster/*/values.secret.yaml
+infra/terraform/cloudflare/envs/*/backend.conf
+
+.playwright-mcp/*

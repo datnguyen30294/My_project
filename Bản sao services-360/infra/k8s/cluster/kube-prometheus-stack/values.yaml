@@ -1,0 +1,95 @@
+# kube-prometheus-stack 83.x — single-node dev cluster (rke2-demego)
+# Upstream chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# Secrets (Grafana admin password) live in values.secret.yaml (gitignored).
+
+# ---------- Prometheus ----------
+prometheus:
+  prometheusSpec:
+    retention: 15d
+    retentionSize: 18GB
+    replicas: 1
+    # CRD requires >=60 (chart default 0 rejected)
+    maximumStartupDurationSeconds: 900
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: [ReadWriteOnce]
+          resources:
+            requests:
+              storage: 20Gi
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 2Gi
+
+# ---------- Alertmanager ----------
+alertmanager:
+  alertmanagerSpec:
+    replicas: 1
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: [ReadWriteOnce]
+          resources:
+            requests:
+              storage: 2Gi
+
+# ---------- Grafana ----------
+grafana:
+  # adminPassword set in values.secret.yaml
+  persistence:
+    enabled: true
+    type: pvc
+    storageClassName: longhorn
+    size: 5Gi
+    accessModes: [ReadWriteOnce]
+  ingress:
+    enabled: false           # port-forward for now, NPM later
+  service:
+    type: ClusterIP
+    port: 80
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+# ---------- Agents ----------
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+# ---------- Operator ----------
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# ---------- Disable components not applicable to RKE2 ----------
+# RKE2 embeds control-plane; default scrape targets are not exposed.
+# Enable later with custom TLS config if detailed metrics are required.
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false            # Cilium kube-proxy-replacement (no kube-proxy)
+kubeEtcd:
+  enabled: false            # requires mounting etcd TLS certs
+
+# ---------- CRDs ----------
+# Chart installs CRDs by default. Upgrades require manual CRD upgrade if chart
+# says so — watch release notes when bumping version.
+crds:
+  enabled: true

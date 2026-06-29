@@ -1,0 +1,1 @@
+import{a9 as s,o as n,c,B as o}from"./JeXhLNeB.js";const t={},r={class:"min-h-screen bg-[#f6f7f8]"};function a(e,f){return n(),c("div",r,[o(e.$slots,"default")])}const _=s(t,[["render",a]]);export{_ as default};

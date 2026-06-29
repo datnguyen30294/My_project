@@ -1,0 +1,1 @@
+import{a9 as s,o as t,c,b as a,B as o}from"./JeXhLNeB.js";const n={},r={class:"flex min-h-screen items-center justify-center bg-slate-50"},l={class:"w-full max-w-md px-4"};function d(e,_){return t(),c("div",r,[a("div",l,[o(e.$slots,"default")])])}const i=s(n,[["render",d]]);export{i as default};

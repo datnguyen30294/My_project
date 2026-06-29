@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+@theme static {
+  --font-sans: 'Manrope', sans-serif;
+  --color-primary: #000000;
+  --color-primary-50: #f5f5f8;
+  --color-primary-100: #eaeaef;
+  --color-primary-200: #d5d6df;
+  --color-primary-300: #b1b3c1;
+  --color-primary-400: #1a1a3d;
+  --color-primary-500: #0f0f29;
+  --color-primary-600: #0c0c22;
+  --color-primary-700: #09091a;
+  --color-primary-800: #060613;
+  --color-primary-900: #04040d;
+  --color-primary-950: #020208;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #14171e;
+  --color-border-gray: #e5e7eb;
+  --color-nav-text-primary: #374151;
+  --color-nav-text-secondary: #6b7280;
+
+  --color-green-50: #EFFDF5;
+  --color-green-100: #D9FBE8;
+  --color-green-200: #B3F5D1;
+  --color-green-300: #75EDAE;
+  --color-green-400: #00DC82;
+  --color-green-500: #00C16A;
+  --color-green-600: #00A155;
+  --color-green-700: #007F45;
+  --color-green-800: #016538;
+  --color-green-900: #0A5331;
+  --color-green-950: #052E16;
+}
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Nuxt UI design tokens — admin2 theme */
+:root {
+  --ui-bg: #ffffff !important;
+  --ui-bg-elevated: #f9fafb !important;
+  --ui-text: #0f172a !important;
+  --ui-text-highlighted: #0f172a !important;
+  --ui-text-dimmed: #475569 !important;
+  --ui-text-muted: #334155 !important;
+  --ui-text-toned: #1e293b !important;
+  --ui-border: #e5e7eb !important;
+  --ui-border-accented: #e5e7eb !important;
+  --ui-border-inverted: #0f172a !important;
+  --ui-text-inverted: #ffffff !important;
+}
+
+@layer base {
+  *, ::before, ::after {
+    border-color: transparent;
+  }
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Global custom scrollbar — light gray, thin */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

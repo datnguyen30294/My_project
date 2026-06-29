@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: residential-management-prod
+  labels:
+    app.kubernetes.io/name: residential-management
+    app.kubernetes.io/component: backend
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: residential-management
+      app.kubernetes.io/component: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: residential-management
+        app.kubernetes.io/component: backend
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-credentials
+
+      initContainers:
+        - name: copy-public
+          image: ${REGISTRY_IMAGE}:backend-latest
+          imagePullPolicy: Always
+          command: ["sh", "-c", "cp -r /var/www/html/public/* /shared-public/"]
+          volumeMounts:
+            - name: shared-public
+              mountPath: /shared-public
+
+      containers:
+        - name: php-fpm
+          image: ${REGISTRY_IMAGE}:backend-latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
+        - name: nginx
+          image: ${REGISTRY_IMAGE}:nginx-latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: shared-public
+              mountPath: /var/www/html/public
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+      volumes:
+        - name: shared-public
+          emptyDir: {}

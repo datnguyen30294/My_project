@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Catalog - TNP Service</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f1729",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#14171e",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header / TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-20 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3 text-primary dark:text-slate-100">
+<div class="size-8 bg-primary dark:bg-slate-700 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">domain</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">TNP Service</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-semibold transition-colors" href="#">Trang chủ</a>
+<a class="text-primary dark:text-white text-sm font-bold border-b-2 border-primary dark:border-white py-1" href="#">Dịch vụ</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-semibold transition-colors" href="#">Hợp đồng</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-semibold transition-colors" href="#">Thông báo</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden sm:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 h-full placeholder:text-slate-500 px-3 text-sm" placeholder="Tìm kiếm nhanh..." value=""/>
+</div>
+</label>
+<div class="flex items-center gap-4">
+<button class="relative text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900"></span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-100 dark:border-slate-800" data-alt="User profile avatar of a resident" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkVDSCkr4oAGSex_1-HnsC-dz7lYCF3DjNZfr9NfAUNpKuVGz942FDWkGCB4R37-sQtPNjcqJPA3pmpsMiajEXxNYRdMEauhYEcj7c8JEqIFxLG36Vlb5fzFm-SvOembt6WrtKCQ7y68miZAwXOz_VeTGJEk5xXetPSB4GCBWEkgINa09nzhZpb_1lt2I5GqnRwV1PVYSbVGqWR_DIPhRLdRgjbgeJQ6Cm6WX-yII19I2iXbMmw5bxqyjh2fCtLpGPI-RE-YhpjQMn");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 lg:px-20 py-10">
+<!-- Hero Section & Search -->
+<div class="flex flex-col gap-6 mb-12">
+<div class="max-w-2xl">
+<h1 class="text-primary dark:text-white text-4xl font-extrabold leading-tight tracking-tight mb-3">Danh mục dịch vụ</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Chào mừng cư dân, hãy chọn các dịch vụ tiện ích chuyên nghiệp cho ngôi nhà của bạn.</p>
+</div>
+<div class="w-full max-w-3xl mt-4">
+<div class="flex items-center rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 p-1">
+<div class="flex-1 flex items-center px-4">
+<span class="material-symbols-outlined text-slate-400 mr-3">search</span>
+<input class="w-full border-none bg-transparent focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 py-3" placeholder="Bạn cần tìm dịch vụ gì hôm nay?" type="text"/>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all">
+                                Tìm kiếm
+                            </button>
+</div>
+</div>
+</div>
+<!-- Categories Filter -->
+<div class="flex flex-wrap gap-3 mb-10">
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-white font-semibold shadow-md">
+<span class="material-symbols-outlined text-xl">apps</span>
+                        Tất cả
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 font-semibold hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-xl">cleaning_services</span>
+                        Vệ sinh
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 font-semibold hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-xl">build</span>
+                        Sửa chữa
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 font-semibold hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+                        Vận chuyển
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 font-semibold hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-xl">eco</span>
+                        Chăm sóc
+                    </button>
+</div>
+<!-- Service Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Service Card 1 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Professional house cleaning service with equipment" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwrgXvX2GebRALBcp_RZwhTKYmeY5zMOW6xs1SIjT_H2LZIcFYbfNS-foCFuKCdkYUcZaYgAHWqo9tNx_qQb0P0fW17OmL-wjZ9L96HlaxXmPbExiZTrwxuxsgdGjxVsB09X2Eas4lh8jLNsyLgbjrXSLjdn9Act1G5p9LdxUFk-ng6lDDU5LTXSutMWVqj5vGVlH9VcirYTwvG6KN5ObyRhV7ZwJ7ObDsrF8VAyH0qgYbCvN8muGeguw5pqHF5ZalCu23Crn_2UZB");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Vệ sinh</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Vệ sinh nhà cửa</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Dịch vụ dọn dẹp chuyên nghiệp, bao gồm hút bụi, lau sàn và khử khuẩn không gian sống.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">200.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+<!-- Service Card 2 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Electrician repairing wires in a modern house" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBaXMUonRSasnsMMsR_AXt-d6Gd3_RN1T3RB2RoUZzpVQJzLZ7uT64F2ZiGDod9AayjI6Cd6tSXg12U2-T8xc4ls-sTDIfbJmQJDHcWdA6ak1pAjLwcOe11I3NQmmFIeCn6oyFD2tMzdrtgEW1f-rWbtHlPmdOZVbWK-Jp6EmZuraGPiFyn62LW6dpb_DR6qhBFNYQ4L_z6hRCvu_rkMUmCrfP7s5vkdX5eRlcTy1jQ_wK49bsvfh9sG0SNK3vbfNo_MYpIAEeXhdC3");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Sửa chữa</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Sửa chữa điện nước</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Khắc phục sự cố điện, rò rỉ nước nhanh chóng bởi đội ngũ kỹ thuật tay nghề cao.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">150.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+<!-- Service Card 3 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Movers packing boxes in a living room" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1H8zY3ZmX0dSmfZOgfiRPNzowWDGihu7CJ9a2hZVTIJnTlWqKMho6PFvVfDfGRdDRujwpnh74HCtpzdzS15EsEfBMXirGDgYEqKMdi5OkLDVS8zCjAi71olgQi8cHbrKCtW_bGLs_euxO0LjsRf0Y_7phg_3RPhml4byrw5GujZpvZ4vMl3CMRlOhBFuNJJYs8rT2uAoTkEl982ZpMxyOJwwmE3VyFib3W8od6Q5CGgqHKkLk6ZAXSwY9Sx21AbqX80Hsaqcn7Mi9");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Vận chuyển</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Vận chuyển nhà</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Dịch vụ đóng gói và chuyển đồ đạc trọn gói, an toàn và chuyên nghiệp nhất.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">500.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+<!-- Service Card 4 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Gardener pruning plants in a garden balcony" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQIX0ozrCgXLny6mrHoFU25U3k7s2iS6UndHGgboVUGapwhjQhnmscGvgD2eSiHHskv2iUjtpdDcMJ7mc_lNF0ew1oESyYbxrFPlTxDhtdtEwn7GSn-D6cBnWewYj8YpTJc_wRMnDDFT8LYNHuy7gvuoCEGkWs031XZGyFdIQXoP4z47f6faKWxXWNHaB2BFjQMTT3w70KaR9tSCTdefVpTzSZoPxNiqqfynDOdElUX-eACkuNn64mNZI1YuSE_uu85Rt-GBgjhsWR");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Chăm sóc</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Chăm sóc cây cảnh</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Cắt tỉa, bón phân và chăm sóc định kỳ cho ban công và vườn cây của bạn.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">100.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+<!-- Service Card 5 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Air conditioning unit being cleaned by professional" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAd-tge9KRiUmoavYlw_daQnnsKjsYlUKet5vaW7O1OOzWwvtJCz75d_sSlCi2vwMfRz7I7q-u4cp9nAuqEh7ZcKp0U0EqbzlxQj3RhB1PiqGlTNy_RmoMk7dxLfJDdA2sgaUwsy9VPlIIDoTKabMUmkQdu589iI11nJZbWtcHH98kUCmkPaHhlledtapLDG2rsWtV2edLmVP6amR4fXrm8aJr9LS5gKEjAOzidI2Olys4t05aViO_YXlCsp94mwE9ptNWnX_R1y-uN");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Sửa chữa</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Vệ sinh máy lạnh</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Bảo dưỡng và vệ sinh máy lạnh giúp tiết kiệm điện và làm sạch không khí trong phòng.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">250.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+<!-- Service Card 6 -->
+<div class="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Professional pest control services inside a house" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBKpKg6A-ul7L1xzKkF3ozkFJCQlR3Lfs9kgaImLiD1KuAiWGlyexGYu_ykgmWz8jW99TIbPgBxkjM1TrIGFBWMwq5W50UBptk7zIbW3kW_y8frP3J5bT0byo7f3mBcBDbFF3OvDT87Qvcrm06sVz9wpaXWnOXONsD75wsAxBOQxgpIJ8IAEinsbxnnVazymps4pF0R9PjPeGrkpSnIuFlggly04a7D0nIlPqaHIlPZZoSYyfW6qfk97cZLz6LiBHO9ryR2-pmam8xv");'></div>
+<div class="absolute top-3 left-3 bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Vệ sinh</div>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<h3 class="text-primary dark:text-white text-lg font-bold mb-2">Diệt côn trùng</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-1">
+                                Kiểm soát và tiêu diệt các loại côn trùng gây hại như mối, gián, muỗi định kỳ.
+                            </p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-medium">Từ</span>
+<span class="text-primary dark:text-white font-extrabold text-lg">400.000đ</span>
+</div>
+<button class="bg-primary text-white text-sm font-bold px-4 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2">
+                                    Đặt ngay
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination/Load more -->
+<div class="mt-16 flex flex-col items-center gap-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">Đang hiển thị 6 trên 24 dịch vụ</p>
+<button class="bg-white dark:bg-slate-900 text-primary dark:text-white border-2 border-primary dark:border-slate-700 px-10 py-3 rounded-xl font-bold hover:bg-primary hover:text-white dark:hover:bg-slate-700 transition-all">
+                        Xem thêm dịch vụ
+                    </button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 px-6 lg:px-20 mt-20">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
+<div class="flex flex-col gap-4 max-w-sm">
+<div class="flex items-center gap-3 text-primary dark:text-slate-100">
+<div class="size-6 bg-primary dark:bg-slate-700 rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-lg">domain</span>
+</div>
+<h2 class="text-lg font-bold">TNP Service</h2>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            Nền tảng quản lý và cung cấp dịch vụ tiện ích hàng đầu dành cho cư dân hiện đại. Cam kết chất lượng và an tâm.
+                        </p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-10">
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-primary dark:text-white text-sm uppercase tracking-wider">Hỗ trợ</h4>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">Trung tâm trợ giúp</a>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">Chính sách bảo mật</a>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">Điều khoản dịch vụ</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-primary dark:text-white text-sm uppercase tracking-wider">Kết nối</h4>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">Facebook</a>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">LinkedIn</a>
+<a class="text-slate-500 dark:text-slate-400 text-sm hover:text-primary transition-colors" href="#">Zalo OA</a>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+<p class="text-slate-400 text-xs">© 2024 TNP Service. Tất cả các quyền được bảo lưu.</p>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-slate-300">credit_card</span>
+<span class="material-symbols-outlined text-slate-300">account_balance_wallet</span>
+<span class="material-symbols-outlined text-slate-300">payments</span>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

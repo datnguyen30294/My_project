@@ -1,0 +1,1 @@
+import{u as t}from"./Cyyc1wvC.js";import{S as s}from"./BOyyT4iU.js";import{y as i}from"./JeXhLNeB.js";function u(){const{data:e}=t(()=>({per_page:s,sort_by:"period_end",sort_direction:"desc"}));return{closingPeriodOptions:i(()=>(e.value?.data??[]).map(o=>({label:`${o.name}${o.project?` — ${o.project.name}`:""}${o.status.value==="open"?" (đang mở)":""}`,value:o.id})))}}export{u};

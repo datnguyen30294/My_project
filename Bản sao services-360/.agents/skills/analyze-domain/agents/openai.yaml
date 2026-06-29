@@ -1,0 +1,7 @@
+interface:
+  display_name: "Analyze Domain"
+  short_description: "Spec a domain into BE/FE BA docs"
+  default_prompt: "Use $analyze-domain to turn these requirements or mockups into separate Vietnamese BE and FE specs under docs/ba/modules."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HRM Accounts Management - TNP Service</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f0f29",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#14141e",
+                        "border-gray": "#e5e7eb",
+                        "nav-text-primary": "#374151",
+                        "nav-text-secondary": "#6b7280",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-size: 20px;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-slate-900 antialiased">
+<div class="flex h-screen overflow-hidden">
+<!-- SIDEBAR -->
+<aside class="w-[240px] flex-shrink-0 bg-[#fafafa] border-r border-border-gray flex flex-col z-20 overflow-y-auto">
+<!-- Sidebar Header / Logo -->
+<div class="h-14 flex items-center px-6 border-b border-border-gray">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-white text-[16px]">grid_view</span>
+</div>
+<span class="font-bold text-slate-900 tracking-tight">TNP Service</span>
+</div>
+</div>
+<!-- Navigation Items -->
+<nav class="flex-1 py-4 flex flex-col gap-1">
+<!-- Trang chu -->
+<a class="flex items-center gap-3 px-6 py-2 border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-nav-text-secondary">home</span>
+<span class="text-[14px] font-medium">Trang chủ</span>
+</a>
+<!-- HRM Parent - Open & Active -->
+<details class="group" open="">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-primary bg-primary/5 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">badge</span>
+<span class="text-[14px] font-medium">HRM</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-primary font-semibold bg-primary/5 border-l-2 border-primary" href="#">Tài khoản</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50 border-l-2 border-transparent" href="#">Phòng ban</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50 border-l-2 border-transparent" href="#">Chức danh</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50 border-l-2 border-transparent" href="#">Quản lý dự án</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50 border-l-2 border-transparent" href="#">Hệ thống phân quyền</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50 border-l-2 border-transparent" href="#">Kế hoạch phân ca</a>
+</div>
+</details>
+<!-- Order Management -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">shopping_cart</span>
+<span class="text-[14px] font-medium">Quản lý đơn hàng</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Danh sách đơn hàng</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Tạo đơn mới</a>
+</div>
+</details>
+<!-- Reports -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">assessment</span>
+<span class="text-[14px] font-medium">Báo cáo</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Tổng quan</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Báo cáo chi tiết</a>
+</div>
+</details>
+<!-- Settings -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">settings</span>
+<span class="text-[14px] font-medium">Cài đặt hệ thống</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Người dùng &amp; quyền</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Thông số hệ thống</a>
+</div>
+</details>
+</nav>
+<!-- Sidebar Footer -->
+<div class="p-4 border-t border-border-gray">
+<div class="flex items-center gap-3 text-nav-text-secondary">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-[13px]">Trợ giúp &amp; Hỗ trợ</span>
+</div>
+</div>
+</aside>
+<!-- MAIN VIEWPORT -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- HEADER -->
+<header class="h-14 flex-shrink-0 bg-white border-b border-border-gray flex items-center justify-between px-6 z-10">
+<div class="flex flex-col justify-center">
+<h1 class="text-[16px] font-semibold text-[#111827] leading-tight">TNP Service</h1>
+<p class="text-[12px] text-[#6b7280]">Quản lý dịch vụ vận hành</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-nav-text-secondary hover:text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-border-gray mx-1"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-[13px] font-medium text-slate-900 leading-none">Quản trị viên</p>
+<p class="text-[11px] text-nav-text-secondary">admin@tnpservice.com</p>
+</div>
+<div class="size-9 rounded-full bg-gray-200 overflow-hidden border border-border-gray">
+<img alt="User Profile Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB4yLK9gslgJigB2qQTAJNQ0GrV-gfYShQsbdbhLecgsdNUE_pRrdUkpIRVKWWlfAZ6WDiCU8WEjYmoDc1rPDhCqsPrS0p9QMEGqjl1ng02D_Bh3nHXIwjMHm68EoZg5vY4WkNRd5c-jn07uhND6Iu2mNt0qs2S36bkmYYrwFowp5X78F2GAe1tmmBinTP3-Cvdm0RY0ukkJPgE0vbtQPMooc9ehPN26R0FNeq3-1gu6nqMYQrIj4kq_BoGInFV51yhtHEiULq30yA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- CONTENT AREA -->
+<main class="flex-1 overflow-y-auto bg-background-light p-6">
+<div class="max-w-7xl mx-auto">
+<!-- Breadcrumbs -->
+<nav class="flex mb-4 text-[12px] text-nav-text-secondary gap-2 items-center">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-nav-text-secondary">HRM</span>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-slate-900 font-medium">Tài khoản</span>
+</nav>
+<!-- Page Title & Description -->
+<div class="mb-6">
+<h2 class="text-xl font-bold text-slate-900">Tài khoản</h2>
+<p class="text-sm text-nav-text-secondary mt-1">Quản lý tài khoản; mỗi user thuộc một phòng ban và có một chức danh.</p>
+</div>
+<!-- Toolbar -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+<div class="flex flex-wrap items-center gap-3">
+<!-- Search -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-nav-text-secondary !text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 text-sm border border-border-gray rounded-lg focus:ring-1 focus:ring-primary focus:border-primary bg-white placeholder-slate-400" placeholder="Tìm theo tên, email, mã NV..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-2 text-sm border border-border-gray rounded-lg hover:bg-gray-50 bg-white text-nav-text-primary">
+<span>Tất cả phòng ban</span>
+<span class="material-symbols-outlined !text-[18px] text-nav-text-secondary">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-sm border border-border-gray rounded-lg hover:bg-gray-50 bg-white text-nav-text-primary">
+<span>Tất cả chức danh</span>
+<span class="material-symbols-outlined !text-[18px] text-nav-text-secondary">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-2 text-sm border border-border-gray rounded-lg hover:bg-gray-50 bg-white text-nav-text-primary">
+<span>Tất cả dự án</span>
+<span class="material-symbols-outlined !text-[18px] text-nav-text-secondary">expand_more</span>
+</button>
+</div>
+<button class="text-sm font-medium text-nav-text-secondary hover:text-primary px-2 transition-colors">Xóa bộ lọc</button>
+</div>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined !text-[20px]">add</span>
+Thêm tài khoản
+</button>
+</div>
+<!-- Data Table -->
+<div class="bg-white border border-border-gray rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#fafafa] border-b border-border-gray">
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary w-16">Avatar</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[200px]">Email</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[160px]">Họ tên</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[100px]">Mã NV</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[140px]">Phòng ban</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[140px]">Chức danh</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[100px]">Role</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary min-w-[120px]">Trạng thái</th>
+<th class="px-4 py-3 text-[13px] font-semibold text-nav-text-secondary text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-gray/50">
+<!-- Row 1 -->
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-4 py-4">
+<div class="w-10 h-10 rounded-full border border-border-gray bg-gray-200 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMDZIjsojyfTY8unUU7OpE4golNkgEYo0Lb7CKCDYYDtLQEeHfyGB03ci9Ew6LXU25OAg1Z1FlQHDpW_f45QJJojqy5bykBhviRJIaQhivTLsjf8D_mFuZmUuWtkWBbBNO4B8zLPRBvy3b7eMShq36CZAUmVf-dfHoKMZURGd5eE_ipiBDdHQAT2mGDjvqQI4wuZFBNsmcSp9BJUizFeSw2b6q3t0uBG-M9u-YGxKe2Jw9xMdcM5LJR1Trrrc9LPxrCL_HhhFwpiEB'); background-size: cover;"></div>
+</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">admin@tnp.vn</td>
+<td class="px-4 py-4 text-sm font-semibold text-slate-900">Nguyễn Văn A</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary font-mono">NV001</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Hành chính</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Trưởng phòng</td>
+<td class="px-4 py-4 text-sm">
+<span class="px-2.5 py-1 rounded bg-gray-100 text-nav-text-primary font-medium text-[12px]">Admin</span>
+</td>
+<td class="px-4 py-4 text-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-[12px] font-medium border border-green-100">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+Hoạt động
+</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-nav-text-secondary hover:text-primary hover:bg-gray-100 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-nav-text-secondary hover:text-red-500 hover:bg-red-50 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-4 py-4">
+<div class="w-10 h-10 rounded-full border border-border-gray bg-gray-200 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFpxKdCOy-ctxv8sjVI2rnmlLW1G5VIR8LxR3zWDQxx4EjIpWMA_HoJDOBRypHFitZW_KhawvqsI-ujNJteXtI42gRfg2P2X6ralaeG4KZAC66cEHWEwU5bK9avzh5Pikxp6rPKnONWUaCCMvZ31w9Vq-Am3Fon16YG4NrvHOa1z8NKG9JgY5wgiwylHZ__tU02OPbiqeYNV7wMtLHhx-edB5TiNsFyCqAYtVmRnwLdrjquY1G-r4VuuXF9HbAmlt-e8F2UhE-YxcF'); background-size: cover;"></div>
+</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">dev01@tnp.vn</td>
+<td class="px-4 py-4 text-sm font-semibold text-slate-900">Trần Thị B</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary font-mono">NV002</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Kỹ thuật</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Nhân viên</td>
+<td class="px-4 py-4 text-sm">
+<span class="px-2.5 py-1 rounded bg-gray-100 text-nav-text-primary font-medium text-[12px]">User</span>
+</td>
+<td class="px-4 py-4 text-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-[12px] font-medium border border-green-100">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+Hoạt động
+</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-nav-text-secondary hover:text-primary hover:bg-gray-100 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-nav-text-secondary hover:text-red-500 hover:bg-red-50 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-4 py-4">
+<div class="w-10 h-10 rounded-full border border-border-gray bg-gray-200 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAXejgHUp7qbERSZ1adYoTm1cM--NjASc14EilWK7TimqqD0vkjTIHd1V24cbwZ1PXBZq5TSAhHe1on9R1uPp7iHJ-8bh3ZdeSQj_szuzo7ShaFoQ9Aidm0nZ-vx3V2M5SvapXzy59wh4az9lKxT9CvmyNwpZTsL3PSxgRs9WhZrxVRvPoPNqfuE-xHZAUxskrMrROTqnzf9Fc-LiPDIGsqBcs2KAW5VS8H3XMTXX4gX-670c14Ii5MkbXfhmKp--_WHG4CGUI9wdSS'); background-size: cover;"></div>
+</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">acc01@tnp.vn</td>
+<td class="px-4 py-4 text-sm font-semibold text-slate-900">Lê Văn C</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary font-mono">NV003</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Kế toán</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Kế toán viên</td>
+<td class="px-4 py-4 text-sm">
+<span class="px-2.5 py-1 rounded bg-gray-100 text-nav-text-primary font-medium text-[12px]">User</span>
+</td>
+<td class="px-4 py-4 text-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-nav-text-secondary text-[12px] font-medium border border-border-gray">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+Khóa
+</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-nav-text-secondary hover:text-primary hover:bg-gray-100 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-nav-text-secondary hover:text-red-500 hover:bg-red-50 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-gray-50 transition-colors">
+<td class="px-4 py-4">
+<div class="w-10 h-10 rounded-full border border-border-gray bg-gray-200 overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCWnoI-kP5k-1wIVf3Qx8m3TasZR_8521-kEG3R4gU0cQEFrC-lwBHBV5vRFurAxYm68j7gZoz_wfF805ZFduqL4qkrEb_F9mlK_0srYmSOSPnniWDXPVfrqG1y94hMhQj52rVIgzgi8Sl6pY6f1tZ_TiwAck-esqeNtJO_G-OYgKezFhmb_D4j-OEcUBYKY5MTxYh_HZFH4hsv5DwEHQnf50zR_-rWx2qxosvkmQGObOzrGcSv-U0sMIqFjcudsXwrimgqS3QJcqx1'); background-size: cover;"></div>
+</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">hr01@tnp.vn</td>
+<td class="px-4 py-4 text-sm font-semibold text-slate-900">Phạm Thị D</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary font-mono">NV004</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Nhân sự</td>
+<td class="px-4 py-4 text-sm text-nav-text-secondary">Chuyên viên</td>
+<td class="px-4 py-4 text-sm">
+<span class="px-2.5 py-1 rounded bg-gray-100 text-nav-text-primary font-medium text-[12px]">Manager</span>
+</td>
+<td class="px-4 py-4 text-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 text-green-700 text-[12px] font-medium border border-green-100">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+Hoạt động
+</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 text-nav-text-secondary hover:text-primary hover:bg-gray-100 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-nav-text-secondary hover:text-red-500 hover:bg-red-50 rounded transition-colors">
+<span class="material-symbols-outlined !text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-[#fafafa] border-t border-border-gray flex items-center justify-between">
+<span class="text-sm text-nav-text-secondary">Hiển thị 1-4 trên 48 kết quả</span>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-border-gray text-nav-text-secondary hover:bg-gray-100 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined !text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-[13px] font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-border-gray text-nav-text-primary hover:bg-gray-100 text-[13px] font-medium">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-border-gray text-nav-text-primary hover:bg-gray-100 text-[13px] font-medium">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-border-gray text-nav-text-secondary hover:bg-gray-100">
+<span class="material-symbols-outlined !text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

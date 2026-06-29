@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: residential-management-dev
+data:
+  APP_NAME: "Residential Management"
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_URL: "https://api.nathen.io.vn"
+  TENANCY_CENTRAL_DOMAINS: "api.nathen.io.vn"
+  LOG_CHANNEL: stderr
+  DB_CONNECTION: pgsql
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_DATABASE: residential_management
+  DB_USERNAME: residential_user
+  FILESYSTEM_DISK: s3
+  QUEUE_CONNECTION: database
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  CACHE_STORE: redis
+  SESSION_DRIVER: redis
+  AWS_BUCKET: residential-management
+  AWS_DEFAULT_REGION: auto
+  AWS_USE_PATH_STYLE_ENDPOINT: "true"
+  AWS_URL: "https://cdn-rm.nathen.io.vn"
+  TELESCOPE_ENABLED: "false"
+  MAIL_MAILER: smtp
+  MAIL_HOST: smtp.gmail.com
+  MAIL_PORT: "587"
+  MAIL_SCHEME: smtp
+  MAIL_FROM_ADDRESS: "thainv1612@gmail.com"
+  MAIL_FROM_NAME: "TNP Services"
+  FRONTEND_URL: "https://app.nathen.io.vn"

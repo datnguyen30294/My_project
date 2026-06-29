@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: residential-management-prod
+  labels:
+    app.kubernetes.io/name: residential-management
+    app.kubernetes.io/component: redis
+spec:
+  selector:
+    app.kubernetes.io/name: residential-management
+    app.kubernetes.io/component: redis
+  ports:
+    - port: 6379
+      targetPort: 6379

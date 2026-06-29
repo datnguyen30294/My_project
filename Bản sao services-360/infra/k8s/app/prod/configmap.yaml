@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: residential-management-prod
+data:
+  APP_NAME: "Residential Management"
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_URL: "https://api.service360.demego.vn"
+  # Full API FQDN(s) của platform. Host request match các giá trị này = platform (không init tenancy).
+  # Tenant API domains (ví dụ api.pse.demego.vn) lưu trong bảng `domains`.
+  TENANCY_CENTRAL_DOMAINS: "api.service360.demego.vn"
+  LOG_CHANNEL: stderr
+  DB_CONNECTION: pgsql
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_DATABASE: residential_management
+  DB_USERNAME: residential_user
+  FILESYSTEM_DISK: s3
+  QUEUE_CONNECTION: database
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  CACHE_STORE: redis
+  SESSION_DRIVER: redis
+  AWS_BUCKET: residential-management-prod
+  AWS_DEFAULT_REGION: auto
+  AWS_USE_PATH_STYLE_ENDPOINT: "true"
+  # TODO: point to R2 public URL (pub-<hash>.r2.dev) or custom CDN domain (e.g. cdn-rm-prod.nathen.io.vn)
+  # after enabling public access on bucket residential-management-prod.
+  AWS_URL: "https://cdn-rm-prod.nathen.io.vn"
+  TELESCOPE_ENABLED: "false"
+  MAIL_MAILER: smtp
+  MAIL_HOST: smtp.gmail.com
+  MAIL_PORT: "587"
+  MAIL_SCHEME: smtp
+  MAIL_FROM_ADDRESS: "thainv1612@gmail.com"
+  MAIL_FROM_NAME: "TNP Services"
+  FRONTEND_URL: "https://demego.vn"
+  # resi_mart S2S provisioning. resi_mart chạy cùng cluster (namespace resi-mart-prod);
+  # gọi nội bộ qua cross-namespace Service DNS, bỏ qua ingress. Token nằm trong backend-secrets.
+  RESI_MART_INTERNAL_URL: "http://backend.resi-mart-prod.svc.cluster.local"
+  # Base host resi_mart dùng để suy subdomain partner từ slug (vd "hoaqua" → "hoaqua.demego.vn").
+  # LƯU Ý: vendor ở "<slug>.demego.vn" trùng namespace với PMC tenant ("<slug>.demego.vn"),
+  # nên KHÔNG dùng wildcard *.demego.vn cho resi_mart — phải tạo NPM proxy host exact cho mỗi partner.
+  RESI_MART_TENANT_BASE_HOST: "demego.vn"
+  # Read-only cross-DB connection vào Postgres resi_mart (đọc đơn hàng vendor +
+  # commission). Tách biệt với S2S HTTP ở trên: đây là kết nối Postgres trực tiếp
+  # tới service `postgres` của namespace resi-mart-prod. Password nằm trong backend-secrets.
+  RESIMART_DB_HOST: "postgres.resi-mart-prod.svc.cluster.local"
+  RESIMART_DB_PORT: "5432"
+  RESIMART_DB_DATABASE: "resi_mart"
+  RESIMART_DB_USERNAME: "resi_mart_user"

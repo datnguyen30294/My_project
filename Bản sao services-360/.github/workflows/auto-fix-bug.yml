@@ -1,0 +1,201 @@
+name: Auto-fix Bug
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: auto-fix-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  auto-fix:
+    name: Triage & Auto-fix
+    if: |
+      (github.event_name == 'issues' && github.event.label.name == 'bug') ||
+      (github.event_name == 'issue_comment' &&
+       !github.event.issue.pull_request &&
+       contains(github.event.comment.body, '/auto-fix') &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo_mysql, zip, pcntl, gd, intl
+          tools: composer:v2
+
+      - name: Cache Composer (vendor)
+        uses: actions/cache@v5
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install backend deps
+        working-directory: backend
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Prepare backend env
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git
+        run: |
+          git config user.name "claude-auto-fix[bot]"
+          git config user.email "claude-auto-fix@users.noreply.github.com"
+
+      - name: Run Claude auto-fix
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: "--model claude-opus-4-7 --max-turns 40 --allowed-tools Bash,Read,Write,Edit,Glob,Grep"
+          prompt: |
+            You are an automated bug-fix bot for the `0henri0/residential-management` monorepo.
+            Issue number: #${{ github.event.issue.number }}
+            Repo default branch: `main`
+
+            ## Mission
+            Decide whether this bug should be auto-fixed. If yes, implement the fix and open a draft PR. If no, post a comment on the issue explaining why and exit cleanly.
+
+            ## Step 1 — Read the issue
+            Run:
+              gh issue view ${{ github.event.issue.number }} --comments
+
+            Also check for an existing PR:
+              gh pr list --state open --search "issue #${{ github.event.issue.number }} in:body"
+
+            If a PR is already open that references this issue, post a comment linking to it and exit.
+
+            ## Step 2 — Triage (SKIP if ANY of these are true)
+            SKIP when:
+              - Reproduction is unclear, or the issue describes an expectation/feature rather than a code bug.
+              - Fix requires a product decision, data migration, infra/secret change, or breaking API change.
+              - Touches authentication, authorization, tenancy isolation, or cryptography code.
+              - Scope would exceed ~10 files, or spans ≥ 2 top-level modules (`backend/app/Modules/*` or cross backend+frontend when not trivially paired).
+              - Root cause cannot be identified with confidence ≥ 0.7 from the codebase alone.
+              - Fix requires running the app in a browser/database to validate — CI here cannot do that.
+
+            If SKIP, run:
+              gh issue comment ${{ github.event.issue.number }} --body "$(cat <<'EOF'
+              🤖 **Auto-fix skipped**
+
+              **Reason:** <one paragraph>
+
+              **What would unblock auto-fix:** <concrete ask — repro steps, decision needed, scope narrowing>
+
+              _Triaged by Claude (claude-opus-4-7). A human reviewer should take over._
+              EOF
+              )"
+            Then exit successfully.
+
+            ## Step 3 — Fix (only if NOT skipped)
+            Rules you MUST follow (from `CLAUDE.md`):
+              - Follow existing conventions. Scan sibling files first.
+              - Backend: Repository pattern — Service never calls `Model::query()` directly.
+              - Backend naming: `Create{Entity}Request`, `Update{Entity}Request`, etc. Never `Store{Entity}Request`.
+              - Frontend: Nuxt 4, `<script setup lang="ts">`, Nuxt UI components first (UAlert/UBadge/etc — NOT custom Tailwind divs for alerts/badges/cards).
+              - Frontend API: `useApiFetch` for GET, `$api` for mutations — defined in `app/composables/api/`.
+              - No `any`, no `@ts-ignore` on the frontend.
+              - Prefer editing existing files over creating new ones.
+
+            Workflow:
+              1. Create a branch that is **server-side linked to the issue** (this guarantees the PR auto-links back to the issue — do NOT use plain `git checkout -b`):
+                   gh issue develop ${{ github.event.issue.number }} \
+                     --repo 0henri0/residential-management \
+                     --branch auto-fix/issue-${{ github.event.issue.number }} \
+                     --checkout
+                 If the branch already exists, fall back to:
+                   git fetch origin auto-fix/issue-${{ github.event.issue.number }}
+                   git checkout auto-fix/issue-${{ github.event.issue.number }}
+              2. Read relevant files, understand conventions, implement the fix.
+              3. Backend checklist (if backend files changed):
+                   cd backend
+                   vendor/bin/pint --dirty --format agent
+                   vendor/bin/pint --test --format agent
+                   php artisan test --compact --filter=<relevant test name>
+              4. Frontend checklist (if frontend files changed):
+                   cd frontend
+                   pnpm run lint
+                   pnpm run typecheck
+              5. If lint/typecheck/tests fail, fix and retry (max 3 attempts total). If still failing, comment on the issue with the error output and exit — do NOT open a broken PR.
+              6. If your fix needs a new test, add it.
+
+            ## Step 4 — Open the PR
+              git add -A
+              git commit -m "$(cat <<'EOF'
+              fix: <short summary of the fix>
+
+              Closes #${{ github.event.issue.number }}
+
+              Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+              EOF
+              )"
+              git push -u origin auto-fix/issue-${{ github.event.issue.number }}
+
+              gh pr create --draft \
+                --base main \
+                --title "fix: <short summary> (#${{ github.event.issue.number }})" \
+                --body "$(cat <<'EOF'
+              ## Summary
+              <what changed and why, 2–4 bullets>
+
+              ## Root cause
+              <one paragraph>
+
+              ## Verification
+              - [ ] `vendor/bin/pint --test` passes
+              - [ ] Relevant tests pass
+              - [ ] `pnpm run lint` / `pnpm run typecheck` passes (if frontend)
+              - [ ] Human reviewer confirms behavior against the issue
+
+              Closes #${{ github.event.issue.number }}
+
+              🤖 Auto-generated by Claude (claude-opus-4-7). **Draft — requires human review before merge.**
+              EOF
+              )"
+
+            Then comment on the issue with the PR link:
+              gh issue comment ${{ github.event.issue.number }} --body "🤖 Auto-fix PR opened: <pr-url>"
+
+            ## Important
+            - Never force-push. Never bypass hooks with `--no-verify`.
+            - Never merge the PR yourself. Leave it as draft.
+            - If in doubt at any step, SKIP and comment rather than guess.

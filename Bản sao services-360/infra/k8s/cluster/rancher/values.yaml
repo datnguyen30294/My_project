@@ -1,0 +1,23 @@
+# Rancher v2.13.x — single-node dev cluster (rke2-demego)
+# Upstream chart: https://github.com/rancher/rancher/tree/release/v2.13/chart
+# Only overrides — do not duplicate chart defaults.
+
+# Public hostname Rancher advertises (for self-generated certs and redirects).
+# DNS (A record) + NPM proxy host point `rancher.demego.vn` → demego-server:443 → rke2-vm:30083.
+hostname: rancher.demego.vn
+
+# HTTP only inside the pod; TLS terminated at NPM (when exposed publicly)
+# or by `kubectl port-forward` + browser warning (when accessed privately).
+tls: external
+
+# No ingress controller in this cluster — skip the default Ingress resource.
+# Access via `kubectl port-forward` or (future) an explicit NodePort service.
+ingress:
+  enabled: false
+
+replicas: 1
+
+# Disable in-cluster audit logging (keeps the stack lean for dev).
+auditLog:
+  destination: sidecar
+  level: 0

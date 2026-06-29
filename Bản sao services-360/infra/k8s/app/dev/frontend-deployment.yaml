@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: residential-management-dev
+  labels:
+    app.kubernetes.io/name: residential-management
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: residential-management
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: residential-management
+        app.kubernetes.io/component: frontend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: slave3
+      imagePullSecrets:
+        - name: dockerhub-credentials
+      containers:
+        - name: frontend
+          image: ${REGISTRY_IMAGE}:frontend-dev-latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NUXT_PUBLIC_API_URL
+              value: ${NUXT_PUBLIC_API_URL}
+            - name: NUXT_PUBLIC_BASE_DOMAIN
+              value: app.nathen.io.vn
+            - name: NUXT_PUBLIC_API_DOMAIN
+              value: api.nathen.io.vn
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20

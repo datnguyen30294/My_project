@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f1729",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#14171e",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>TNP Service Platform Home</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-10 lg:px-40 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-2xl">domain</span>
+</div>
+<div>
+<h2 class="text-primary dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight">TNP Service</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Platform Vận Hành</p>
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-primary dark:text-slate-100 text-sm font-semibold border-b-2 border-primary pb-1" href="#">Trang chủ</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-slate-100 text-sm font-medium transition-colors" href="#">Tài liệu</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-slate-100 text-sm font-medium transition-colors" href="#">HRM</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-slate-100 text-sm font-medium transition-colors" href="#">Quản lý đơn hàng</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-slate-100 text-sm font-medium transition-colors" href="#">Báo cáo</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-slate-100 text-sm font-medium transition-colors" href="#">Cài đặt</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-primary dark:text-slate-100 text-sm font-bold transition-all hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="truncate">Quản lý vận hành</span>
+</button>
+<div class="size-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-cover bg-center" data-alt="Professional user profile avatar photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmqXEqeW9-SjzbSU5p4yxB9MbpGOjUKkHBC0Pg6CX2WjcS7VwVKYPLrEUKZzyuTPxCuhZ5GIP5Cni_f5EcOf3jAAZl1gkO-og_cc82rODI2JNVATSFd9VF034KOGn7UDXC6WlqZFzeuEjLm53oqnWzxntyuEC4KI6-Oo-8aM6yJTeDxxzNqS8PZeua9bEy2SCFCxf3pjoQEtqt-tKSS-aAHMIxx49ogTq0Ud7sl71_6UHGf1iUA9ckMt448I38_ro31h41trIywLq2");'>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 lg:px-40 px-6 py-12">
+<div class="max-w-7xl mx-auto">
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+<div class="flex flex-col gap-8 order-2 lg:order-1">
+<div class="space-y-4">
+<span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">Giải pháp quản lý 4.0</span>
+<h1 class="text-slate-900 dark:text-slate-50 text-4xl lg:text-6xl font-black leading-tight tracking-tight">
+                                    Nền tảng quản lý dịch vụ cho công ty vận hành
+                                </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-xl">
+                                    Giải pháp toàn diện cho HRM, dịch vụ cư dân và quản lý vận hành chuyên nghiệp. Tối ưu hóa quy trình làm việc và nâng cao hiệu quả kinh doanh của bạn.
+                                </p>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary text-white text-base font-bold transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20">
+                                    Khám phá ngay
+                                </button>
+<button class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-base font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                    Xem demo
+                                </button>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl bg-primary/5">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
+<div class="w-full h-full bg-cover bg-center" data-alt="Modern digital dashboard analytics display on screen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIlSa5Y8rrwE5L6BaWUK0KwcTikaABXVR_q-YCoGiDdxSVxo2Y_D9SE8aLBbleRmqv0CMg0_JeodInGxV74ISlxvvND04CgdtRWO6LboxLSvzTMZzYOmBUJmAW7DZ3Hbi1IYSKLJbAUGcCsJ2N_J-mFZydXmVpRVUycYQdUDwefaiPCrjJWOv3qc23tsvt8jZQz0GckSfPwtxddp3ATq1en53sEiAzDtVjuXYbLgyrlCa7FQN-AVfQoZXdGVeiBiA_Fysx1TF7dXlR");'>
+</div>
+</div>
+</div>
+</section>
+<section class="py-12 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-10">
+<div>
+<h2 class="text-slate-900 dark:text-slate-50 text-3xl font-bold tracking-tight mb-2">Các module chính</h2>
+<p class="text-slate-500 dark:text-slate-400">Các công cụ mạnh mẽ hỗ trợ vận hành doanh nghiệp</p>
+</div>
+<div class="hidden md:flex gap-2">
+<button class="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="size-14 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">groups</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">HRM</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                    Quản lý nhân sự và phân quyền theo dự án. Tự động hóa bảng lương và chấm công.
+                                </p>
+<div class="mt-auto flex items-center gap-2 text-primary font-bold text-sm cursor-pointer hover:underline underline-offset-4">
+                                    Vào module
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="size-14 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">shopping_cart</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Quản lý đơn hàng</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                    Theo dõi, tạo và xử lý đơn hàng. Tích hợp quản lý kho vận linh hoạt.
+                                </p>
+<div class="mt-auto flex items-center gap-2 text-primary font-bold text-sm cursor-pointer hover:underline underline-offset-4">
+                                    Vào module
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="size-14 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">bar_chart</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Báo cáo</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                    Báo cáo tổng hợp và thống kê trực quan. Phân tích dữ liệu kinh doanh thông minh.
+                                </p>
+<div class="mt-auto flex items-center gap-2 text-primary font-bold text-sm cursor-pointer hover:underline underline-offset-4">
+                                    Vào module
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="size-14 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">settings</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Cài đặt hệ thống</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                    Cấu hình và cài đặt linh hoạt. Tùy chỉnh tham số hệ thống theo nhu cầu doanh nghiệp.
+                                </p>
+<div class="mt-auto flex items-center gap-2 text-primary font-bold text-sm cursor-pointer hover:underline underline-offset-4">
+                                    Vào module
+                                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 lg:px-40 px-6 py-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">domain</span>
+<span class="text-lg font-bold text-primary dark:text-white">TNP Service</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">Trang chủ</a>
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">Tài liệu</a>
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">HRM</a>
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">Đơn hàng</a>
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">Báo cáo</a>
+<a class="text-slate-500 hover:text-primary dark:hover:text-white text-sm font-medium transition-colors" href="#">Cài đặt</a>
+</div>
+<p class="text-slate-400 text-sm">© 2024 TNP Service Platform. All rights reserved.</p>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

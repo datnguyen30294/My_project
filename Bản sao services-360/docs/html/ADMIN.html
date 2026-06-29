@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TNP Service Minimalist App Shell</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f0f29",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#14141e",
+                        "border-gray": "#e5e7eb",
+                        "nav-text-primary": "#374151",
+                        "nav-text-secondary": "#6b7280",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-size: 20px;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<!-- SIDEBAR -->
+<aside class="w-[240px] flex-shrink-0 bg-[#fafafa] border-r border-border-gray flex flex-col z-20 overflow-y-auto">
+<div class="h-14 flex items-center px-6 border-b border-border-gray">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-white text-[16px]">grid_view</span>
+</div>
+<span class="font-bold text-slate-900 tracking-tight">TNP Service</span>
+</div>
+</div>
+<nav class="flex-1 py-4 flex flex-col gap-1">
+<!-- Single Link -->
+<a class="flex items-center gap-3 px-6 py-2 border-l-2 border-primary bg-primary/5 text-nav-text-primary" href="#">
+<span class="material-symbols-outlined text-nav-text-secondary">home</span>
+<span class="text-[14px] font-medium">Trang chủ</span>
+</a>
+<!-- Single Link -->
+<a class="flex items-center gap-3 px-6 py-2 border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-nav-text-secondary">description</span>
+<span class="text-[14px] font-medium">Tài liệu</span>
+</a>
+<!-- HRM Parent -->
+<details class="group" open="">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">badge</span>
+<span class="text-[14px] font-medium">HRM</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Tài khoản</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Phòng ban</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Chức danh</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Quản lý dự án</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Hệ thống phân quyền</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Kế hoạch phân ca</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Lịch làm việc chung</a>
+</div>
+</details>
+<!-- Order Management Parent -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">shopping_cart</span>
+<span class="text-[14px] font-medium">Quản lý đơn hàng</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Danh sách đơn hàng</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Tạo đơn mới</a>
+</div>
+</details>
+<!-- Reports Parent -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">assessment</span>
+<span class="text-[14px] font-medium">Báo cáo</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Tổng quan</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Báo cáo chi tiết</a>
+</div>
+</details>
+<!-- System Settings Parent -->
+<details class="group">
+<summary class="flex items-center justify-between px-6 py-2 cursor-pointer border-l-2 border-transparent hover:bg-gray-100 text-nav-text-primary list-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-nav-text-secondary">settings</span>
+<span class="text-[14px] font-medium">Cài đặt hệ thống</span>
+</div>
+<span class="material-symbols-outlined text-nav-text-secondary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="flex flex-col mt-1">
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Người dùng &amp; quyền</a>
+<a class="pl-[52px] pr-6 py-2 text-[13px] text-nav-text-secondary hover:text-primary hover:bg-gray-50" href="#">Thông số hệ thống</a>
+</div>
+</details>
+</nav>
+<div class="p-4 border-t border-border-gray">
+<div class="flex items-center gap-3 text-nav-text-secondary">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-[13px]">Trợ giúp &amp; Hỗ trợ</span>
+</div>
+</div>
+</aside>
+<!-- MAIN VIEWPORT -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- HEADER -->
+<header class="h-14 flex-shrink-0 bg-white border-b border-border-gray flex items-center justify-between px-6 z-10">
+<div class="flex flex-col justify-center">
+<h1 class="text-[16px] font-semibold text-[#111827] leading-tight">TNP Service</h1>
+<p class="text-[12px] text-[#6b7280]">Quản lý dịch vụ vận hành</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-nav-text-secondary hover:text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-border-gray mx-1"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-[13px] font-medium text-slate-900 leading-none">Quản trị viên</p>
+<p class="text-[11px] text-nav-text-secondary">admin@tnpservice.com</p>
+</div>
+<div class="size-9 rounded-full bg-gray-200 overflow-hidden border border-border-gray">
+<img alt="User Profile Image" data-alt="Minimalist vector profile avatar of a professional administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB4yLK9gslgJigB2qQTAJNQ0GrV-gfYShQsbdbhLecgsdNUE_pRrdUkpIRVKWWlfAZ6WDiCU8WEjYmoDc1rPDhCqsPrS0p9QMEGqjl1ng02D_Bh3nHXIwjMHm68EoZg5vY4WkNRd5c-jn07uhND6Iu2mNt0qs2S36bkmYYrwFowp5X78F2GAe1tmmBinTP3-Cvdm0RY0ukkJPgE0vbtQPMooc9ehPN26R0FNeq3-1gu6nqMYQrIj4kq_BoGInFV51yhtHEiULq30yA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- CONTENT AREA -->
+<main class="flex-1 overflow-y-auto bg-background-light p-6">
+<div class="max-w-7xl mx-auto h-full flex flex-col">
+<!-- Breadcrumbs (Subtle addition for professional look) -->
+<nav class="flex mb-4 text-[12px] text-nav-text-secondary gap-2 items-center">
+<a class="hover:text-primary" href="#">Trang chủ</a>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-slate-900 font-medium">HRM</span>
+<span class="material-symbols-outlined !text-[14px]">chevron_right</span>
+<span class="text-slate-900 font-medium">Tài khoản</span>
+</nav>
+<!-- Main Placeholder Card -->
+<div class="flex-1 min-h-[500px] bg-white border border-border-gray rounded shadow-sm flex flex-col items-center justify-center p-12 text-center group">
+<div class="w-16 h-16 rounded-full bg-gray-50 border border-dashed border-border-gray flex items-center justify-center mb-4 transition-colors group-hover:bg-gray-100">
+<span class="material-symbols-outlined text-gray-400 !text-3xl">inbox</span>
+</div>
+<h2 class="text-xl font-medium text-slate-900 mb-2">Nội dung chính</h2>
+<p class="text-nav-text-secondary max-w-sm mb-6">
+                            Đây là khu vực hiển thị nội dung chi tiết. Chọn một mục từ menu bên trái để bắt đầu quản lý hệ thống của bạn.
+                        </p>
+<button class="px-4 py-2 bg-primary text-white text-[14px] font-medium rounded hover:bg-slate-800 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined !text-[18px]">add</span>
+                            Thêm dữ liệu mới
+                        </button>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

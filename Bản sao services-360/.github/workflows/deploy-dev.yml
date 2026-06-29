@@ -1,0 +1,250 @@
+name: Build & Deploy Dev
+
+on:
+  push:
+    branches: [develop]
+
+concurrency:
+  group: build-images-dev
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/residential
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+
+  build-backend:
+    name: Build Backend Image
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v7
+        with:
+          context: backend
+          file: backend/Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.REGISTRY_IMAGE }}:backend-dev-${{ github.sha }}
+            ${{ env.REGISTRY_IMAGE }}:backend-dev-latest
+          cache-from: type=gha,scope=backend-dev
+          cache-to: type=gha,mode=max,scope=backend-dev
+
+  build-nginx:
+    name: Build Nginx Image
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push nginx
+        uses: docker/build-push-action@v7
+        with:
+          context: backend/docker/nginx
+          file: backend/docker/nginx/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY_IMAGE }}:nginx-dev-${{ github.sha }}
+            ${{ env.REGISTRY_IMAGE }}:nginx-dev-latest
+          cache-from: type=gha,scope=nginx-dev
+          cache-to: type=gha,mode=max,scope=nginx-dev
+
+  build-frontend:
+    name: Build Frontend Image
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v7
+        with:
+          context: frontend
+          file: frontend/Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.REGISTRY_IMAGE }}:frontend-dev-${{ github.sha }}
+            ${{ env.REGISTRY_IMAGE }}:frontend-dev-latest
+          cache-from: type=gha,scope=frontend-dev
+          cache-to: type=gha,mode=max,scope=frontend-dev
+
+  deploy-backend:
+    name: Deploy Backend to K8s
+    needs: [build-backend, build-nginx]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v5
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_DEV }}" | base64 -d > ~/.kube/config
+
+      - name: Rolling restart backend
+        run: |
+          wait_rollout() {
+            local ns=$1 name=$2 timeout=${3:-600} elapsed=0
+            while [ $elapsed -lt $timeout ]; do
+              local json gen obs ready updated desired
+              json=$(kubectl get deploy "$name" -n "$ns" -o json 2>/dev/null) || { echo "get failed"; sleep 5; elapsed=$((elapsed+5)); continue; }
+              gen=$(echo "$json" | jq -r '.metadata.generation')
+              obs=$(echo "$json" | jq -r '.status.observedGeneration // 0')
+              ready=$(echo "$json" | jq -r '.status.readyReplicas // 0')
+              updated=$(echo "$json" | jq -r '.status.updatedReplicas // 0')
+              desired=$(echo "$json" | jq -r '.spec.replicas')
+              if [ "$obs" = "$gen" ] && [ "$ready" = "$desired" ] && [ "$updated" = "$desired" ]; then
+                echo "deployment/$name rolled out ($ready/$desired)"
+                return 0
+              fi
+              echo "waiting for deployment/$name: gen=$gen obs=$obs ready=$ready updated=$updated desired=$desired"
+              sleep 10; elapsed=$((elapsed+10))
+            done
+            echo "timeout waiting for deployment/$name"
+            kubectl describe deployment/"$name" -n "$ns" | tail -30
+            return 1
+          }
+          kubectl rollout restart deployment/backend -n residential-management-dev
+          wait_rollout residential-management-dev backend 600
+
+      - name: Run migrations & seed permissions
+        run: |
+          wait_pod_ready() {
+            local ns=$1 pod=$2 timeout=${3:-120} elapsed=0
+            while [ $elapsed -lt $timeout ]; do
+              local status
+              status=$(kubectl get pod "$pod" -n "$ns" -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null)
+              if [ "$status" = "True" ]; then
+                echo "pod/$pod ready"; return 0
+              fi
+              echo "waiting for pod/$pod: ready=$status"
+              sleep 5; elapsed=$((elapsed+5))
+            done
+            echo "timeout waiting for pod/$pod"; return 1
+          }
+          sleep 10
+          POD=$(kubectl get pods -n residential-management-dev -l app.kubernetes.io/component=backend --field-selector=status.phase=Running -o jsonpath='{.items[0].metadata.name}')
+          wait_pod_ready residential-management-dev "$POD" 120
+          echo "Running on pod: $POD"
+          kubectl exec -n residential-management-dev "$POD" -c php-fpm -- php artisan migrate --force
+          kubectl exec -n residential-management-dev "$POD" -c php-fpm -- php artisan tenants:migrate --force
+          kubectl exec -n residential-management-dev "$POD" -c php-fpm -- php artisan tenants:seed --class="Database\\Seeders\\Tenant\\PermissionSeeder" --force
+
+      - name: Rolling restart queue worker
+        run: |
+          wait_rollout() {
+            local ns=$1 name=$2 timeout=${3:-600} elapsed=0
+            while [ $elapsed -lt $timeout ]; do
+              local json gen obs ready updated desired
+              json=$(kubectl get deploy "$name" -n "$ns" -o json 2>/dev/null) || { echo "get failed"; sleep 5; elapsed=$((elapsed+5)); continue; }
+              gen=$(echo "$json" | jq -r '.metadata.generation')
+              obs=$(echo "$json" | jq -r '.status.observedGeneration // 0')
+              ready=$(echo "$json" | jq -r '.status.readyReplicas // 0')
+              updated=$(echo "$json" | jq -r '.status.updatedReplicas // 0')
+              desired=$(echo "$json" | jq -r '.spec.replicas')
+              if [ "$obs" = "$gen" ] && [ "$ready" = "$desired" ] && [ "$updated" = "$desired" ]; then
+                echo "deployment/$name rolled out ($ready/$desired)"
+                return 0
+              fi
+              echo "waiting for deployment/$name: gen=$gen obs=$obs ready=$ready updated=$updated desired=$desired"
+              sleep 10; elapsed=$((elapsed+10))
+            done
+            echo "timeout waiting for deployment/$name"
+            kubectl describe deployment/"$name" -n "$ns" | tail -30
+            return 1
+          }
+          kubectl rollout restart deployment/queue-worker -n residential-management-dev
+          wait_rollout residential-management-dev queue-worker 600
+
+  deploy-frontend:
+    name: Deploy Frontend to K8s
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v5
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_DEV }}" | base64 -d > ~/.kube/config
+
+      - name: Rolling restart frontend
+        run: |
+          wait_rollout() {
+            local ns=$1 name=$2 timeout=${3:-600} elapsed=0
+            while [ $elapsed -lt $timeout ]; do
+              local json gen obs ready updated desired
+              json=$(kubectl get deploy "$name" -n "$ns" -o json 2>/dev/null) || { echo "get failed"; sleep 5; elapsed=$((elapsed+5)); continue; }
+              gen=$(echo "$json" | jq -r '.metadata.generation')
+              obs=$(echo "$json" | jq -r '.status.observedGeneration // 0')
+              ready=$(echo "$json" | jq -r '.status.readyReplicas // 0')
+              updated=$(echo "$json" | jq -r '.status.updatedReplicas // 0')
+              desired=$(echo "$json" | jq -r '.spec.replicas')
+              if [ "$obs" = "$gen" ] && [ "$ready" = "$desired" ] && [ "$updated" = "$desired" ]; then
+                echo "deployment/$name rolled out ($ready/$desired)"
+                return 0
+              fi
+              echo "waiting for deployment/$name: gen=$gen obs=$obs ready=$ready updated=$updated desired=$desired"
+              sleep 10; elapsed=$((elapsed+10))
+            done
+            echo "timeout waiting for deployment/$name"
+            kubectl describe deployment/"$name" -n "$ns" | tail -30
+            return 1
+          }
+          kubectl rollout restart deployment/frontend -n residential-management-dev
+          wait_rollout residential-management-dev frontend 600
+

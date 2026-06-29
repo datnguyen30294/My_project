@@ -1,0 +1,18 @@
+# BackupTarget mặc định cho Longhorn (>= v1.7).
+# Webhook validator.longhorn.io yêu cầu CR `BackupTarget/default` tồn tại
+# khi provision volume. Nếu không có, mọi PVC mới sẽ pending với lỗi:
+#   admission webhook "validator.longhorn.io" denied the request:
+#   failed to get backup target default: backuptarget.longhorn.io "default" not found
+#
+# Để empty (backupTargetURL: "") nghĩa là không cấu hình remote backup —
+# chỉ cần record này tồn tại để webhook pass. Sau này muốn bật S3/NFS backup
+# thì update spec.backupTargetURL + credentialSecret.
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  name: default
+  namespace: longhorn-system
+spec:
+  backupTargetURL: ""
+  credentialSecret: ""
+  pollInterval: 5m0s

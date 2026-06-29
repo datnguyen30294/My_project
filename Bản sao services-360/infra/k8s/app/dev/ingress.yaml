@@ -1,0 +1,87 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: residential-management
+  namespace: residential-management-dev
+  labels:
+    app.kubernetes.io/name: residential-management
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.nathen.io.vn
+        - tnp.api.nathen.io.vn
+        - abc.api.nathen.io.vn
+        - app.nathen.io.vn
+        - tnp.app.nathen.io.vn
+        - abc.app.nathen.io.vn
+      secretName: residential-management-tls
+  rules:
+    # Central API (Platform)
+    - host: api.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 80
+    # Tenant API
+    - host: tnp.api.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 80
+    - host: abc.api.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 80
+    # Central Frontend (Platform)
+    - host: app.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000
+    # Tenant Frontend
+    - host: tnp.app.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000
+    - host: abc.app.nathen.io.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000

@@ -1,0 +1,21 @@
+# External access for Rancher UI via NodePort.
+# The Rancher Helm chart only creates a ClusterIP service. This sibling service
+# exposes the same pods on a node port so NPM on demego-server can forward
+# https://rancher.demego.vn → rke2-vm:30083 (HTTP, TLS terminated at NPM).
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-nodeport
+  namespace: cattle-system
+  labels:
+    app: rancher
+    purpose: external-access
+spec:
+  type: NodePort
+  selector:
+    app: rancher
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30083

@@ -1,0 +1,23 @@
+# Longhorn v1.11.1 — single-node dev cluster (rke2-demego)
+# Upstream chart: https://github.com/longhorn/longhorn/tree/master/chart
+# Only override what differs from chart defaults.
+
+persistence:
+  defaultClass: true
+  defaultClassReplicaCount: 1        # single-node cluster: 1 replica
+  reclaimPolicy: Retain              # giữ PV khi PVC bị xoá → tránh mất data nếu xoá PVC nhầm
+
+defaultSettings:
+  defaultReplicaCount: 1
+  replicaSoftAntiAffinity: false     # allow scheduling on single node
+  storageOverProvisioningPercentage: 200
+  defaultDataPath: /var/lib/longhorn
+  backupTarget: ""                   # deferred — configure S3/NFS later
+  orphanAutoDeletion: true
+  snapshotMaxCount: 5
+
+longhornUI:
+  replicas: 1
+
+ingress:
+  enabled: false                     # access via Rancher UI or kubectl port-forward

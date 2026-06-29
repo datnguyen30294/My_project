@@ -1,0 +1,20 @@
+# Promtail — DaemonSet scraping all pod logs on each node
+# Upstream chart: https://github.com/grafana/helm-charts/tree/main/charts/promtail
+
+config:
+  clients:
+    - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
+
+daemonset:
+  enabled: true
+
+# Default scrape configs tail /var/log/pods/*/*.log — Kubernetes pod logs.
+# Add pipeline to parse container logs (docker/cri format auto-detected).
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

@@ -1,0 +1,98 @@
+name: Deploy to RKE2 (GitOps)
+
+# Cụm RKE2 (infra-thainguyen) — GitOps qua ArgoCD. KHÔNG đụng deploy-prod.yml/deploy-dev.yml
+# (vẫn đang deploy app sang cụm k8s vật lý KHÁC theo model push-based cũ — giữ nguyên).
+#
+# Workflow này CHỈ bump image tag trong infra repo, KHÔNG build lại: tái dùng image mà
+# "Build & Deploy Prod" vừa push (tag backend-<sha> / nginx-<sha> / frontend-<sha>).
+# Trigger = workflow_run (chạy SAU khi build xong, chỉ khi success trên main).
+# ArgoCD trên RKE2 thấy commit bump → PreSync hook migrate/tenants:migrate/seed → rollout.
+#
+# Secret cần ở repo này (THÊM, ngoài các secret cũ):
+#   INFRA_REPO_DEPLOY_KEY — SSH private key (deploy key có quyền WRITE) của 0henri0/infra-thainguyen
+
+on:
+  workflow_run:
+    workflows: ["Build & Deploy Prod"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/residential
+
+jobs:
+  bump-manifests:
+    name: Bump image tags in infra repo
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout services-360 @ built SHA
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 2
+
+      - name: Detect changed components
+        id: filter
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          BACKEND=false; FRONTEND=false
+          CHANGED=$(git diff --name-only "${SHA}~1" "${SHA}" || git diff --name-only HEAD~1 HEAD)
+          echo "$CHANGED" | grep -q '^backend/'  && BACKEND=true  || true
+          echo "$CHANGED" | grep -q '^frontend/' && FRONTEND=true || true
+          echo "backend=$BACKEND"   >> "$GITHUB_OUTPUT"
+          echo "frontend=$FRONTEND" >> "$GITHUB_OUTPUT"
+          echo "changed: backend=$BACKEND frontend=$FRONTEND"
+
+      - name: Checkout infra repo (write via deploy key)
+        if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
+        uses: actions/checkout@v5
+        with:
+          repository: 0henri0/infra-thainguyen
+          ssh-key: ${{ secrets.INFRA_REPO_DEPLOY_KEY }}
+          ref: main
+          path: infra
+
+      - name: Install kustomize
+        if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
+        run: |
+          curl -sLo kustomize.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz
+          tar -xzf kustomize.tar.gz && sudo mv kustomize /usr/local/bin/
+
+      - name: Bump tags
+        if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
+        working-directory: infra/tenants-apps/residential-management/workloads
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -e
+          if [ "${{ steps.filter.outputs.backend }}" = "true" ]; then
+            kustomize edit set image residential-backend=${REGISTRY_IMAGE}:backend-${SHA}
+            kustomize edit set image residential-nginx=${REGISTRY_IMAGE}:nginx-${SHA}
+            echo "bumped backend + nginx → ${SHA}"
+          fi
+          if [ "${{ steps.filter.outputs.frontend }}" = "true" ]; then
+            kustomize edit set image residential-frontend=${REGISTRY_IMAGE}:frontend-${SHA}
+            echo "bumped frontend → ${SHA}"
+          fi
+
+      - name: Commit & push
+        if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
+        working-directory: infra
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          git config user.name "services-360 CI"
+          git config user.email "ci@services-360.noreply"
+          git add tenants-apps/residential-management/workloads/kustomization.yaml
+          if git diff --cached --quiet; then
+            echo "Không có thay đổi tag — bỏ qua commit."
+            exit 0
+          fi
+          git commit -m "chore(rm): bump image ${SHA::7} [skip ci]"
+          git push origin main

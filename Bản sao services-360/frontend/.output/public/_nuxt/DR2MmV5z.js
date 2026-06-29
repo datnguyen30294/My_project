@@ -1,0 +1,1 @@
+import{d as a,c as o,b as e,t as n,B as l,o as c}from"./JeXhLNeB.js";const _={class:"text-xs font-medium text-slate-500 mb-1"},i={class:"text-slate-900 text-sm"},r=a({__name:"FieldDisplay",props:{label:{}},setup(t){return(s,d)=>(c(),o("div",null,[e("h2",_,n(t.label),1),e("div",i,[l(s.$slots,"default")])]))}}),p=Object.assign(r,{__name:"SharedFieldDisplay"});export{p as _};

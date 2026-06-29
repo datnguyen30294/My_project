@@ -1,0 +1,72 @@
+# Loki v6.x — SingleBinary mode for single-node dev cluster
+# Upstream chart: https://github.com/grafana/loki/tree/main/production/helm/loki
+# Docs: https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/
+
+deploymentMode: SingleBinary
+
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  storage:
+    type: filesystem
+    # Required by chart template even with filesystem (bucketNames is read unconditionally)
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+  limits_config:
+    retention_period: 168h          # 7 days
+    reject_old_samples: true
+    reject_old_samples_max_age: 168h
+  compactor:
+    retention_enabled: true
+    delete_request_store: filesystem
+
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    size: 10Gi
+    accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+
+# Disable microservice-mode components
+write:
+  replicas: 0
+read:
+  replicas: 0
+backend:
+  replicas: 0
+
+# Disable heavy caches for single-node dev
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# Disable helm test pods
+test:
+  enabled: false
+lokiCanary:
+  enabled: false
+
+# Disable gateway (Promtail talks to Loki directly inside the cluster)
+gateway:
+  enabled: false
